@@ -1,12 +1,14 @@
 mod utils;
 
-use std::{collections::HashMap};
+use std::{collections::HashMap, ptr::eq};
 
 use utils::set_panic_hook;
 use wasm_bindgen::prelude::*;
 use serde::{Serialize, Deserialize};
+use json::object;
 
 extern crate web_sys;
+extern crate json;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Example {
@@ -32,7 +34,20 @@ pub fn send_example_to_js() -> JsValue {
 pub fn handle_json_from_js(val: &str) {
     set_panic_hook();
 
-    web_sys::console::log_1(&val.into());
+    let parsed = json::parse(val).unwrap();
+
+    let instantiated = object!{
+        "field1":{"0":"ex"},"field2":[[1,2],[3,4],[5,6]],"field3":[1,2,3,4]
+    };
+
+    // print the two objects
+    web_sys::console::log_1(&parsed.to_string().into());
+    web_sys::console::log_1(&"Hello".into());
+    web_sys::console::log_1(&instantiated.to_string().into());
+
+
+    let result =parsed.to_string().eq(&instantiated.to_string());
+    web_sys::console::log_1(&result.into());
 }
 
 #[wasm_bindgen]

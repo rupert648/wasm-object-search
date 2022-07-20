@@ -5,4 +5,5 @@
  - goal it to utilise [this approach](https://rustwasm.github.io/wasm-bindgen/reference/arbitrary-data-with-serde.html) to handling data, however generalise the case **even more** in order to allow fully arbitrary data structures to be past
   - i.e. nested objects, objects of different structures
   - essentially not passing the serde object into some predefined struct
-  - current best solution idea to this is to convert the dynamic object into a dynamic Hashmap - will be difficult!
+  - currently best solution is to pass the result as a stringified JSON object
+  - then use json rust library to handle the dynamic data structures
